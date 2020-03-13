@@ -1,0 +1,5 @@
+git add *
+git commit -m "updates on the code"
+#git remote add origin https://github.com/skefeli/covid-19.git
+git push -u origin master
+

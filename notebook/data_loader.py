@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+# read continent and population info
 df_countries = pd.read_csv('../input/countries.csv')
 df_countries['Region'] = df_countries['Region'].replace('ASIA', 'Asia')
 df_countries['Region'] = df_countries['Region'].replace('AFRICA', 'Africa')
@@ -9,8 +10,12 @@ df_countries['Region'] = df_countries['Region'].replace('LATIN', 'Latin')
 df_countries['Region'] = df_countries['Region'].replace('NEAR_EAST', 'Near_East')
 df_countries['Region'] = df_countries['Region'].replace('NORTHERN_AMERICA', 'Northern_America')
 df_countries['Region'] = df_countries['Region'].replace('OCEANIA', 'Oceania')
+
+# read covid-19 data, and clean up country names
 df_table = pd.read_csv('../input/covid_19_clean_complete.csv', parse_dates=['Date'])
+df_table.drop(df_table[((df_table['Date'].dt.month == 3)&(df_table['Date'].dt.day > 11))].index, inplace=True)
 df_table['Active'] = df_table['Confirmed']-df_table['Deaths']-df_table['Recovered']
+df_table['Closed'] = df_table['Confirmed']-df_table['Active']
 df_table['Country/Region'] = df_table['Country/Region'].replace('Mainland China', 'China')
 df_table['Country/Region'] = df_table['Country/Region'].replace('US', 'United States')
 df_table['Country/Region'] = df_table['Country/Region'].replace('UK', 'United Kingdom')
@@ -36,6 +41,12 @@ df_table['Country/Region'] = df_table['Country/Region'].replace('Holy See', 'Vat
 df_table['Country/Region'] = df_table['Country/Region'].replace('Czechia', 'Czech Republic')
 df_table['Province/State'] = df_table['Province/State'].fillna('NA')
 
+# US States counted twice
+
+df_table.drop(df_table[(df_table['Province/State'].str.contains(','))& 
+                       ((df_table['Date'].dt.month == 3)&(df_table['Date'].dt.day > 9))].index, inplace=True)
+
+# create dictionary of continent names
 continent_dict = {}
 for c in np.unique(df_countries['Country']):
   continent_dict[c] = df_countries[df_countries['Country']==c]['Region'].values[0]
