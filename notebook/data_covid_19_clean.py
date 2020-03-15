@@ -13,7 +13,8 @@ df_countries['Region'] = df_countries['Region'].replace('OCEANIA', 'Oceania')
 
 # read covid-19 data, and clean up country names
 df_table = pd.read_csv('../input/covid_19_clean_complete.csv', parse_dates=['Date'])
-df_table.drop(df_table[((df_table['Date'].dt.month == 3)&(df_table['Date'].dt.day > 11))].index, inplace=True)
+#df_table.drop(df_table[((df_table['Date'].dt.month == 3)&(df_table['Date'].dt.day > 11))].index, inplace=True)
+df_table.drop(df_table[df_table['Date']=='2020-03-12'].index, inplace=True)
 df_table['Active'] = df_table['Confirmed']-df_table['Deaths']-df_table['Recovered']
 df_table['Closed'] = df_table['Confirmed']-df_table['Active']
 df_table['Country/Region'] = df_table['Country/Region'].replace('Mainland China', 'China')
@@ -43,8 +44,8 @@ df_table['Province/State'] = df_table['Province/State'].fillna('NA')
 
 # US States counted twice
 
-df_table.drop(df_table[(df_table['Province/State'].str.contains(','))& 
-                      ((df_table['Date'].dt.month == 3)&(df_table['Date'].dt.day > 9))].index, inplace=True)
+#df_table.drop(df_table[(df_table['Province/State'].str.contains(','))& 
+#                      ((df_table['Date'].dt.month == 3)&(df_table['Date'].dt.day > 9))].index, inplace=True)
 
 # create dictionary of continent names
 continent_dict = {}

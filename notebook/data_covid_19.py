@@ -11,6 +11,7 @@ df_countries['Region'] = df_countries['Region'].replace('OCEANIA', 'Oceania')
 
 # read covid-19 data, and clean up country names
 df_table = pd.read_csv('../input/covid_19_data.csv', parse_dates=['ObservationDate'])
+df_table.rename(columns={'ObservationDate':'Date'}, inplace=True)
 df_table['Active'] = df_table['Confirmed']-df_table['Deaths']-df_table['Recovered']
 df_table['Closed'] = df_table['Confirmed']-df_table['Active']
 df_table['Country/Region'] = df_table['Country/Region'].replace('Mainland China', 'China')
